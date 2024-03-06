@@ -28,7 +28,8 @@
             ErrorMessage = errorMessage;
         }
 
-        public static Result<T?> Success(T value) => new Result<T?>(true, value, null);
-        public static Result<T?> Error(string message) => new Result<T?>(false, default, message);
+        public static Result<T> Success(T value) => new Result<T>(true, value, null);
+        public static Result<T> Error(string message) => new Result<T>(false, default, message);
+        public static Result<T> Forbidden() => new Result<T>(false, default, "Acesso negado");
     }
 }

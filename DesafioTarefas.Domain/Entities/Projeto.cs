@@ -6,27 +6,31 @@
 
         public Guid Id { get; private set; }
 
+        public DateTime DataHoraCadastro { get; private set; }
+
         public ICollection<Tarefa> Tarefas { get; private set; } = null!;
 
-        public Usuario Usuario { get; private set; } = null!;
+        public Guid UsuarioId { get; private set; }
 
         private Projeto()
         {
         }
 
-        public Projeto(Guid id, Usuario usuario)
+        public Projeto(Guid usuarioId)
             : this(
-                id,
+                Guid.NewGuid(),
+                DateTime.Now,
                 new List<Tarefa>(),
-                usuario)
+                usuarioId)
         {
         }
 
-        public Projeto(Guid id, ICollection<Tarefa> tarefas, Usuario usuario)
+        public Projeto(Guid id, DateTime dataHoraCadastro, ICollection<Tarefa> tarefas, Guid usuarioId)
         {
             Id = id;
+            DataHoraCadastro = dataHoraCadastro;
             Tarefas = tarefas;
-            Usuario = usuario;
+            UsuarioId = usuarioId;
         }
 
         public Result AdicionarTarefa(Tarefa tarefa)

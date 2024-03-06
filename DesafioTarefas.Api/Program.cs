@@ -1,15 +1,37 @@
+using DesafioTarefas.Api.Services;
+using DesafioTarefas.Application;
+using DesafioTarefas.Domain.Repositories;
+using DesafioTarefas.Domain.Services;
+using DesafioTarefas.Domain.UnitsOfWork;
+using DesafioTarefas.Infra.Contexts;
+using DesafioTarefas.Infra.Repositories;
+using DesafioTarefas.Infra.UnitsOfWork;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddDbContext<DesafioContext>(db =>
+{
+    db.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(ApplicationAssemblyReference.Assembly));
+
+builder.Services.AddScoped<IUserResolverService, UserResolverService>();
+builder.Services.AddScoped<IProjetoRepository, ProjetoRepository>();
+builder.Services.AddScoped<ITarefaRepository, TarefasRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -21,5 +43,9 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+var scope = app.Services.CreateScope();
+var db = scope.ServiceProvider.GetRequiredService<DesafioContext>();
+db.Database.EnsureCreated();
 
 app.Run();
