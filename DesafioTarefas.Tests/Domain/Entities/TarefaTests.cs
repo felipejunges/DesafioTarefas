@@ -39,6 +39,7 @@ namespace DesafioTarefas.Tests.Domain.Entities
             tarefa.Atualizar(usuario.Id, "Novo Título", tarefa.Status, tarefa.DataPrazo, default);
 
             Assert.Single(tarefa.Historico);
+            Assert.Equal(nameof(tarefa.Titulo), tarefa.Historico.First().Campo);
         }
 
         [Fact]
@@ -50,6 +51,7 @@ namespace DesafioTarefas.Tests.Domain.Entities
             tarefa.Atualizar(usuario.Id, tarefa.Titulo, Status.EmAndamento, tarefa.DataPrazo, default);
 
             Assert.Single(tarefa.Historico);
+            Assert.Equal(nameof(tarefa.Status), tarefa.Historico.First().Campo);
         }
 
         [Fact]
@@ -61,6 +63,7 @@ namespace DesafioTarefas.Tests.Domain.Entities
             tarefa.Atualizar(usuario.Id, tarefa.Titulo, tarefa.Status, tarefa.DataPrazo.AddDays(1), default);
 
             Assert.Single(tarefa.Historico);
+            Assert.Equal(nameof(tarefa.DataPrazo), tarefa.Historico.First().Campo);
         }
 
         [Fact]

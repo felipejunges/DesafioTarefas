@@ -12,7 +12,7 @@ namespace DesafioTarefas.Domain.Entities
 
         public Status Status { get; private set; }
 
-        public DateTime DataPrazo { get; private set; }
+        public DateOnly DataPrazo { get; private set; }
 
         public string? Observacoes { get; private set; }
 
@@ -31,7 +31,7 @@ namespace DesafioTarefas.Domain.Entities
             Comentarios = new HashSet<Comentario>();
         }
 
-        public Tarefa(string titulo, Prioridade prioridade, DateTime dataPrazo, string? observacoes)
+        public Tarefa(string titulo, Prioridade prioridade, DateOnly dataPrazo, string? observacoes)
             : this(
                 Guid.NewGuid(),
                 titulo,
@@ -42,7 +42,7 @@ namespace DesafioTarefas.Domain.Entities
         {
         }
 
-        public Tarefa(Guid id, string titulo, Prioridade prioridade, Status status, DateTime dataPrazo, string? observacoes)
+        public Tarefa(Guid id, string titulo, Prioridade prioridade, Status status, DateOnly dataPrazo, string? observacoes)
         {
             Id = id;
             Titulo = titulo;
@@ -50,7 +50,7 @@ namespace DesafioTarefas.Domain.Entities
             Status = status;
             DataPrazo = dataPrazo;
             Observacoes = observacoes;
-            
+
             Historico = new HashSet<Historico>();
             Comentarios = new HashSet<Comentario>();
         }
@@ -61,7 +61,7 @@ namespace DesafioTarefas.Domain.Entities
                 "Tarefa X",
                 Prioridade.Media,
                 status,
-                DateTime.Now.Date.AddDays(1),
+                DateOnly.FromDateTime(DateTime.Now).AddDays(1),
                 string.Empty);
 
         public void VincularProjeto(Projeto projeto)
@@ -69,7 +69,7 @@ namespace DesafioTarefas.Domain.Entities
             Projeto = projeto;
         }
 
-        public void Atualizar(Guid usuarioId, string titulo, Status status, DateTime dataPrazo, string? observacoes)
+        public void Atualizar(Guid usuarioId, string titulo, Status status, DateOnly dataPrazo, string? observacoes)
         {
             ValidarCamposHistorico(usuarioId, titulo, status, dataPrazo);
 
@@ -79,28 +79,28 @@ namespace DesafioTarefas.Domain.Entities
             Observacoes = observacoes;
         }
 
-        private void ValidarCamposHistorico(Guid usuarioId, string novoTitulo, Status novoStatus, DateTime novoDataPrazo)
+        private void ValidarCamposHistorico(Guid usuarioId, string novoTitulo, Status novoStatus, DateOnly novoDataPrazo)
         {
             if (Titulo != novoTitulo)
-                AdicionarHistorico(usuarioId, $"Título alterado de {Titulo} para {novoTitulo}");
+                AdicionarHistorico(usuarioId, nameof(Titulo), Titulo, novoTitulo);
 
             if (Status != novoStatus)
-                AdicionarHistorico(usuarioId, $"Status alterado de {Status} para {novoStatus}");
+                AdicionarHistorico(usuarioId, nameof(Status), Status.ToString(), novoStatus.ToString());
 
             if (DataPrazo != novoDataPrazo)
-                AdicionarHistorico(usuarioId, $"Data prazo alterada de {DataPrazo} para {novoDataPrazo}");
+                AdicionarHistorico(usuarioId, nameof(DataPrazo), DataPrazo.ToString(), novoDataPrazo.ToString());
         }
 
-        public void AdicionarHistorico(Guid usuarioId, string descricao)
+        private void AdicionarHistorico(Guid usuarioId, string campo, string? valorOriginal, string? novoValor)
         {
-            Historico.Add(new Historico(usuarioId, descricao, this));
+            Historico.Add(new Historico(usuarioId, campo, valorOriginal, novoValor, this));
         }
 
         public void AdicionarComentario(Guid usuarioId, string texto)
         {
             Comentarios.Add(new Comentario(usuarioId, texto, this));
 
-            AdicionarHistorico(usuarioId, "Adicionado comentário");
+            AdicionarHistorico(usuarioId, "Comentario", null, null);
         }
     }
 }

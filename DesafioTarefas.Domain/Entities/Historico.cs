@@ -8,31 +8,39 @@
 
         public DateTime DataHora { get; private set; }
 
-        public string Descricao { get; private set; }
+        public string Campo { get; private set; }
+
+        public string? ValorOriginal { get; private set; }
+
+        public string? NovoValor { get; private set; }
 
         public Tarefa Tarefa { get; private set; } = null!;
 
         private Historico()
         {
-            Descricao = string.Empty;
+            Campo = string.Empty;
         }
 
-        public Historico(Guid usuarioId, string descricao, Tarefa tarefa)
+        public Historico(Guid usuarioId, string campo, string? valorOriginal, string? novoValor, Tarefa tarefa)
             : this(
                 Guid.NewGuid(),
                 usuarioId,
                 DateTime.Now,
-                descricao,
+                campo,
+                valorOriginal,
+                novoValor,
                 tarefa)
         {
         }
 
-        public Historico(Guid id, Guid usuarioId, DateTime dataHora, string descricao, Tarefa tarefa)
+        public Historico(Guid id, Guid usuarioId, DateTime dataHora, string campo, string? valorOriginal, string? novoValor, Tarefa tarefa)
         {
             Id = id;
             UsuarioId = usuarioId;
             DataHora = dataHora;
-            Descricao = descricao;
+            Campo = campo;
+            ValorOriginal = valorOriginal;
+            NovoValor = novoValor;
             Tarefa = tarefa;
         }
     }

@@ -6,7 +6,7 @@
 
         public Guid UsuarioId { get; private set; }
 
-        public DateTime DataHoraCadastro { get; private set; }
+        public DateTime DataHora { get; private set; }
 
         public string Texto { get; private set; }
 
@@ -27,11 +27,11 @@
         {
         }
 
-        public Comentario(Guid id, Guid usuarioId, DateTime dataHoraCadastro, string texto, Tarefa tarefa)
+        public Comentario(Guid id, Guid usuarioId, DateTime dataHora, string texto, Tarefa tarefa)
         {
             Id = id;
             UsuarioId = usuarioId;
-            DataHoraCadastro = dataHoraCadastro;
+            DataHora = dataHora;
             Texto = texto;
             Tarefa = tarefa;
         }
