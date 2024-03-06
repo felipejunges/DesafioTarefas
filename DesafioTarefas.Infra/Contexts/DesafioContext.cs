@@ -8,11 +8,13 @@ namespace DesafioTarefas.Infra.Contexts
     {
         public DesafioContext(DbContextOptions<DesafioContext> options) : base(options) { }
 
+        public DbSet<Historico> Historicos => Set<Historico>();
         public DbSet<Projeto> Projetos => Set<Projeto>();
         public DbSet<Tarefa> Tarefas => Set<Tarefa>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new HistoricoMap());
             modelBuilder.ApplyConfiguration(new ProjetoMap());
             modelBuilder.ApplyConfiguration(new TarefaMap());
 

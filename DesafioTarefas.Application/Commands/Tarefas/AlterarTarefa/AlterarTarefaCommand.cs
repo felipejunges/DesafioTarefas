@@ -10,6 +10,7 @@ namespace DesafioTarefas.Application.Commands.Tarefas.AlterarTarefa
         public Guid ProjetoId { get;private set; }
         public string Titulo { get; init; } = string.Empty;
         public Status Status { get; init; }
+        public DateTime DataPrazo { get; init; }
         public string? Observacoes { get; init; }
 
         public AlterarTarefaCommand Agregar(Guid projetoId, Guid id)

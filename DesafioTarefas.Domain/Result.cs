@@ -13,6 +13,7 @@
 
         public static Result Success() => new Result(true, null);
         public static Result Error(string message) => new Result(false, message);
+        public static Result Forbidden() => new Result(false, "Acesso negado");
     }
 
     public class Result<T>

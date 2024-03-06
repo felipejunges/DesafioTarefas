@@ -31,6 +31,7 @@ namespace DesafioTarefas.Application.Commands.Tarefas.IncluirTarefa
             var tarefa = new Tarefa(
                 command.Titulo,
                 command.Prioridade,
+                command.DataPrazo,
                 command.Observacoes);
 
             tarefa.VincularProjeto(projeto);

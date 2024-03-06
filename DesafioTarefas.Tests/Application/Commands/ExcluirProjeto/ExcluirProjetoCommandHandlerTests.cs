@@ -39,8 +39,8 @@ namespace DesafioTarefas.Tests.Application.Commands.ExcluirProjeto
         {
             var tarefas = new List<Tarefa>()
             {
-                new Tarefa(Guid.NewGuid(), "Tarefa 1", Prioridade.Media, Status.Concluida, string.Empty),
-                new Tarefa(Guid.NewGuid(), "Tarefa 2", Prioridade.Media, Status.Pendente, string.Empty)
+                Tarefa.CriarTarefaParaTeste(Status.Concluida),
+                Tarefa.CriarTarefaParaTeste(Status.Pendente)
             };
 
             var projeto = new Projeto(Guid.NewGuid(), DateTime.Now, tarefas, Guid.NewGuid());
@@ -63,8 +63,8 @@ namespace DesafioTarefas.Tests.Application.Commands.ExcluirProjeto
         {
             var tarefas = new List<Tarefa>()
             {
-                new Tarefa(Guid.NewGuid(), "Tarefa 1", Prioridade.Media, Status.Concluida, string.Empty),
-                new Tarefa(Guid.NewGuid(), "Tarefa 2", Prioridade.Media, Status.Concluida, string.Empty)
+                Tarefa.CriarTarefaParaTeste(Status.Concluida),
+                Tarefa.CriarTarefaParaTeste(Status.Concluida)
             };
 
             var projeto = new Projeto(Guid.NewGuid(), DateTime.Now, tarefas, Guid.NewGuid());

@@ -16,7 +16,9 @@ namespace DesafioTarefas.Infra.Repositories
 
         public Task<Tarefa?> ObterTarefa(Guid id)
         {
-            return _db.Tarefas.FirstOrDefaultAsync(t => t.Id == id);
+            return _db.Tarefas
+                .Include(t => t.Historico)
+                .FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public async Task<IEnumerable<Tarefa>> ListarTarefasDoProjeto(Guid projetoId)
@@ -32,9 +34,16 @@ namespace DesafioTarefas.Infra.Repositories
             return _db.Tarefas.AddAsync(tarefa).AsTask();
         }
 
-        public Task AlterarTarefa(Tarefa tarefa)
+        public async Task AlterarTarefa(Tarefa tarefa)
         {
-            return Task.FromResult(_db.Tarefas.Update(tarefa));
+            await Task.FromResult(_db.Tarefas.Update(tarefa));
+
+            // workaround para incluir os child sem chamar Repository/Context do CommandHandler
+            foreach (var historico in tarefa.Historico)
+            {
+                if (!await _db.Historicos.AnyAsync(h => h.Tarefa.Id == tarefa.Id && h.Id == historico.Id))
+                    _db.Historicos.Add(historico);
+            }
         }
 
         public Task ExcluirTarefa(Tarefa tarefa)
