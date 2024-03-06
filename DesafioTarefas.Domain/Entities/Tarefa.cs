@@ -1,5 +1,4 @@
 ﻿using DesafioTarefas.Domain.Enums;
-using System.ComponentModel;
 
 namespace DesafioTarefas.Domain.Entities
 {
@@ -23,12 +22,13 @@ namespace DesafioTarefas.Domain.Entities
 
         public ICollection<Historico> Historico { get; private set; }
 
-        public IEnumerable<Comentario> Comentario { get; private set; } = null!;
+        public ICollection<Comentario> Comentarios { get; private set; }
 
         private Tarefa()
         {
             Titulo = string.Empty;
             Historico = new HashSet<Historico>();
+            Comentarios = new HashSet<Comentario>();
         }
 
         public Tarefa(string titulo, Prioridade prioridade, DateTime dataPrazo, string? observacoes)
@@ -52,6 +52,7 @@ namespace DesafioTarefas.Domain.Entities
             Observacoes = observacoes;
             
             Historico = new HashSet<Historico>();
+            Comentarios = new HashSet<Comentario>();
         }
 
         public static Tarefa CriarTarefaParaTeste(Status status = Status.Pendente) =>
@@ -87,12 +88,19 @@ namespace DesafioTarefas.Domain.Entities
                 AdicionarHistorico(usuarioId, $"Status alterado de {Status} para {novoStatus}");
 
             if (DataPrazo != novoDataPrazo)
-                AdicionarHistorico(usuarioId, $"Status alterado de {DataPrazo} para {novoDataPrazo}");
+                AdicionarHistorico(usuarioId, $"Data prazo alterada de {DataPrazo} para {novoDataPrazo}");
         }
 
         public void AdicionarHistorico(Guid usuarioId, string descricao)
         {
             Historico.Add(new Historico(usuarioId, descricao, this));
+        }
+
+        public void AdicionarComentario(Guid usuarioId, string texto)
+        {
+            Comentarios.Add(new Comentario(usuarioId, texto, this));
+
+            AdicionarHistorico(usuarioId, "Adicionado comentário");
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using DesafioTarefas.Application.Commands.Projetos.ListarProjetos;
 using DesafioTarefas.Application.Commands.Tarefas.AlterarTarefa;
 using DesafioTarefas.Application.Commands.Tarefas.ExcluirTarefa;
+using DesafioTarefas.Application.Commands.Tarefas.IncluirComentario;
 using DesafioTarefas.Application.Commands.Tarefas.IncluirTarefa;
 using DesafioTarefas.Application.Commands.Tarefas.ListarTarefas;
 using DesafioTarefas.Application.Models.Projetos;
@@ -60,6 +61,19 @@ namespace DesafioTarefas.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> ExcluirTarefa([FromRoute] Guid projetoId, [FromRoute] Guid id, [FromBody] ExcluirTarefaCommand command)
+        {
+            var result = await _mediator.Send(command.Agregar(projetoId, id));
+
+            if (!result.IsSuccess)
+                return BadRequest(result.ErrorMessage);
+
+            return Ok();
+        }
+
+        [HttpPost("/api/Projetos/{projetoId}/[controller]/{id}/Comentario")]
+        [ProducesResponseType(typeof(TarefaResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<TarefaResponse>> IncluirComentario([FromRoute] Guid projetoId, Guid id, [FromBody] IncluirComentarioCommand command)
         {
             var result = await _mediator.Send(command.Agregar(projetoId, id));
 

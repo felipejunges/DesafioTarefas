@@ -62,5 +62,16 @@ namespace DesafioTarefas.Tests.Domain.Entities
 
             Assert.Single(tarefa.Historico);
         }
+
+        [Fact]
+        public void DeveSerGeradoUmHistoricoAoAdicionarUmComentario()
+        {
+            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.");
+            var tarefa = Tarefa.CriarTarefaParaTeste(Status.Pendente);
+
+            tarefa.AdicionarComentario(usuario.Id, "Este é um belo comentário!");
+
+            Assert.Single(tarefa.Historico);
+        }
     }
 }

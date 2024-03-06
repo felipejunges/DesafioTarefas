@@ -44,6 +44,12 @@ namespace DesafioTarefas.Infra.Repositories
                 if (!await _db.Historicos.AnyAsync(h => h.Tarefa.Id == tarefa.Id && h.Id == historico.Id))
                     _db.Historicos.Add(historico);
             }
+
+            foreach (var comentario in tarefa.Comentarios)
+            {
+                if (!await _db.Comentarios.AnyAsync(h => h.Tarefa.Id == tarefa.Id && h.Id == comentario.Id))
+                    _db.Comentarios.Add(comentario);
+            }
         }
 
         public Task ExcluirTarefa(Tarefa tarefa)
