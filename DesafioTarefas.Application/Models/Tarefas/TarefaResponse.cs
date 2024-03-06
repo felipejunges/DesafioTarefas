@@ -8,5 +8,6 @@ namespace DesafioTarefas.Application.Models.Tarefas
         Prioridade Prioridade,
         Status Status,
         DateOnly DataPrazo,
+        DateOnly? DataConclusao,
         string? Observacoes);
 }

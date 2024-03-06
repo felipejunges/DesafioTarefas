@@ -76,5 +76,49 @@ namespace DesafioTarefas.Tests.Domain.Entities
 
             Assert.Single(tarefa.Historico);
         }
+
+        [Fact]
+        public void TarefaInicialmenteNaoDeveTerDataConclusao()
+        {
+            var tarefa = Tarefa.CriarTarefaParaTeste(Status.Pendente);
+
+            Assert.Null(tarefa.DataConclusao);
+        }
+
+        [Fact]
+        public void NaoDeveHaverDataConclusaoEnquantoTarefaEmAndamento()
+        {
+            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.");
+            var tarefa = Tarefa.CriarTarefaParaTeste(Status.Pendente);
+
+            tarefa.Atualizar(usuario.Id, tarefa.Titulo, Status.EmAndamento, tarefa.DataPrazo, tarefa.Observacoes);
+
+            Assert.Null(tarefa.DataConclusao);
+        }
+
+        [Fact]
+        public void DeveSetarDataConclusaoAoConcluirATarefa()
+        {
+            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.");
+            var tarefa = Tarefa.CriarTarefaParaTeste(Status.Pendente);
+
+            tarefa.Atualizar(usuario.Id, tarefa.Titulo, Status.EmAndamento, tarefa.DataPrazo, tarefa.Observacoes);
+            tarefa.Atualizar(usuario.Id, tarefa.Titulo, Status.Concluida, tarefa.DataPrazo, tarefa.Observacoes);
+
+            Assert.Equal(DateOnly.FromDateTime(DateTime.Now), tarefa.DataConclusao);
+        }
+
+        [Fact]
+        public void DeveLimparDataConclusaoAoReabrirATarefa()
+        {
+            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.");
+            var tarefa = Tarefa.CriarTarefaParaTeste(Status.Pendente);
+
+            tarefa.Atualizar(usuario.Id, tarefa.Titulo, Status.EmAndamento, tarefa.DataPrazo, tarefa.Observacoes);
+            tarefa.Atualizar(usuario.Id, tarefa.Titulo, Status.Concluida, tarefa.DataPrazo, tarefa.Observacoes);
+            tarefa.Atualizar(usuario.Id, tarefa.Titulo, Status.EmAndamento, tarefa.DataPrazo, tarefa.Observacoes);
+
+            Assert.Null(tarefa.DataConclusao);
+        }
     }
 }

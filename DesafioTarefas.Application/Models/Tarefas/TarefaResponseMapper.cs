@@ -17,6 +17,7 @@ namespace DesafioTarefas.Application.Models.Tarefas
                 tarefa.Prioridade,
                 tarefa.Status,
                 tarefa.DataPrazo,
+                tarefa.DataConclusao,
                 tarefa.Observacoes);
         }
     }

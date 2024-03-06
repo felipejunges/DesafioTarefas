@@ -16,6 +16,8 @@ namespace DesafioTarefas.Domain.Entities
 
         public string? Observacoes { get; private set; }
 
+        public DateOnly? DataConclusao { get; private set; }
+
         public Projeto Projeto { get; private set; } = null!;
 
         public bool Concluida => Status == Status.Concluida;
@@ -73,10 +75,24 @@ namespace DesafioTarefas.Domain.Entities
         {
             ValidarCamposHistorico(usuarioId, titulo, status, dataPrazo);
 
+            SetarDataConclusao(status);
+
             Titulo = titulo;
             Status = status;
             DataPrazo = dataPrazo;
             Observacoes = observacoes;
+        }
+
+        private void SetarDataConclusao(Status status)
+        {
+            if (Status == status)
+                return;
+
+            if (status == Status.Concluida)
+                DataConclusao = DateOnly.FromDateTime(DateTime.Now);
+
+            if (status != Status.Concluida)
+                DataConclusao = null;
         }
 
         private void ValidarCamposHistorico(Guid usuarioId, string novoTitulo, Status novoStatus, DateOnly novoDataPrazo)
