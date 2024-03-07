@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  desafiotarefas-api:
+    container_name: desafiotarefas-api
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - desafio_db
+    networks:
+      - app
+  
+  desafio_db:
+    container_name: desafio_db
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "SqlServer2019!"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlvolume:/var/opt/mssql
+    networks:
+      - app
+
+volumes:
+  sqlvolume:
+
+networks:
+  app:
+    driver: bridge
