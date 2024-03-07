@@ -1,11 +1,6 @@
-using DesafioTarefas.Api.Services;
+using DesafioTarefas.Api.Configuration;
 using DesafioTarefas.Application;
-using DesafioTarefas.Domain.Repositories;
-using DesafioTarefas.Domain.Services;
-using DesafioTarefas.Domain.UnitsOfWork;
 using DesafioTarefas.Infra.Contexts;
-using DesafioTarefas.Infra.Repositories;
-using DesafioTarefas.Infra.UnitsOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
@@ -19,10 +14,7 @@ builder.Services.AddDbContext<DesafioContext>(db =>
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(ApplicationAssemblyReference.Assembly));
 
-builder.Services.AddScoped<IUserResolverService, UserResolverService>();
-builder.Services.AddScoped<IProjetoRepository, ProjetoRepository>();
-builder.Services.AddScoped<ITarefaRepository, TarefasRepository>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddDesafioServices();
 
 builder.Services
     .AddControllers()
@@ -51,8 +43,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-var scope = app.Services.CreateScope();
-var db = scope.ServiceProvider.GetRequiredService<DesafioContext>();
-db.Database.EnsureCreated();
+app.EnsureDbCreated();
 
 app.Run();
