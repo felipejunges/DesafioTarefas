@@ -10,7 +10,8 @@ namespace DesafioTarefas.Api.Services
             return await Task.FromResult(
                 new Usuario(
                     new Guid("ed612925-7217-416a-b5a3-999d4b6b2fac"),
-                    "Felipe J."));
+                    "Felipe J.",
+                    true));
         }
     }
 }

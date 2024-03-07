@@ -9,7 +9,7 @@ namespace DesafioTarefas.Tests.Domain.Entities
         [Fact]
         public void NaoDeveGerarHistoricoSeCamposNaoForemEditados()
         {
-            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.");
+            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.", true);
             var tarefa = Tarefa.CriarTarefaParaTeste(Status.Pendente);
 
             tarefa.Atualizar(usuario.Id, tarefa.Titulo, tarefa.Status, tarefa.DataPrazo, default);
@@ -20,7 +20,7 @@ namespace DesafioTarefas.Tests.Domain.Entities
         [Fact]
         public void DevemSerGeradosMaisHistoricosSeTodosCamposAlterados()
         {
-            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.");
+            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.", true);
             var tarefa = Tarefa.CriarTarefaParaTeste(Status.Pendente);
 
             tarefa.Atualizar(usuario.Id, "Novo Título", Status.EmAndamento, tarefa.DataPrazo.AddDays(1), default);
@@ -33,7 +33,7 @@ namespace DesafioTarefas.Tests.Domain.Entities
         [Fact]
         public void DeveSerGeradoUmHistoricoAoModificarTitulo()
         {
-            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.");
+            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.", true);
             var tarefa = Tarefa.CriarTarefaParaTeste(Status.Pendente);
 
             tarefa.Atualizar(usuario.Id, "Novo Título", tarefa.Status, tarefa.DataPrazo, default);
@@ -45,7 +45,7 @@ namespace DesafioTarefas.Tests.Domain.Entities
         [Fact]
         public void DeveSerGeradoUmHistoricoAoModificarStatus()
         {
-            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.");
+            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.", true);
             var tarefa = Tarefa.CriarTarefaParaTeste(Status.Pendente);
 
             tarefa.Atualizar(usuario.Id, tarefa.Titulo, Status.EmAndamento, tarefa.DataPrazo, default);
@@ -57,7 +57,7 @@ namespace DesafioTarefas.Tests.Domain.Entities
         [Fact]
         public void DeveSerGeradoUmHistoricoAoModificarDataPrazo()
         {
-            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.");
+            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.", true);
             var tarefa = Tarefa.CriarTarefaParaTeste(Status.Pendente);
 
             tarefa.Atualizar(usuario.Id, tarefa.Titulo, tarefa.Status, tarefa.DataPrazo.AddDays(1), default);
@@ -69,7 +69,7 @@ namespace DesafioTarefas.Tests.Domain.Entities
         [Fact]
         public void DeveSerGeradoUmHistoricoAoAdicionarUmComentario()
         {
-            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.");
+            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.", true);
             var tarefa = Tarefa.CriarTarefaParaTeste(Status.Pendente);
 
             tarefa.AdicionarComentario(usuario.Id, "Este é um belo comentário!");
@@ -88,7 +88,7 @@ namespace DesafioTarefas.Tests.Domain.Entities
         [Fact]
         public void NaoDeveHaverDataConclusaoEnquantoTarefaEmAndamento()
         {
-            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.");
+            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.", true);
             var tarefa = Tarefa.CriarTarefaParaTeste(Status.Pendente);
 
             tarefa.Atualizar(usuario.Id, tarefa.Titulo, Status.EmAndamento, tarefa.DataPrazo, tarefa.Observacoes);
@@ -99,7 +99,7 @@ namespace DesafioTarefas.Tests.Domain.Entities
         [Fact]
         public void DeveSetarDataConclusaoAoConcluirATarefa()
         {
-            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.");
+            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.", true);
             var tarefa = Tarefa.CriarTarefaParaTeste(Status.Pendente);
 
             tarefa.Atualizar(usuario.Id, tarefa.Titulo, Status.EmAndamento, tarefa.DataPrazo, tarefa.Observacoes);
@@ -111,7 +111,7 @@ namespace DesafioTarefas.Tests.Domain.Entities
         [Fact]
         public void DeveLimparDataConclusaoAoReabrirATarefa()
         {
-            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.");
+            var usuario = new Usuario(Guid.NewGuid(), "Felipe J.", true);
             var tarefa = Tarefa.CriarTarefaParaTeste(Status.Pendente);
 
             tarefa.Atualizar(usuario.Id, tarefa.Titulo, Status.EmAndamento, tarefa.DataPrazo, tarefa.Observacoes);

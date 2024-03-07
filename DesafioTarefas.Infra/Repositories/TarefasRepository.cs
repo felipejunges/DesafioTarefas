@@ -1,7 +1,9 @@
-﻿using DesafioTarefas.Domain.Entities;
+﻿using DesafioTarefas.Domain.Dtos;
+using DesafioTarefas.Domain.Entities;
 using DesafioTarefas.Domain.Repositories;
 using DesafioTarefas.Infra.Contexts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace DesafioTarefas.Infra.Repositories
 {
@@ -17,7 +19,6 @@ namespace DesafioTarefas.Infra.Repositories
         public Task<Tarefa?> ObterTarefa(Guid id)
         {
             return _db.Tarefas
-                .Include(t => t.Historico)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 
@@ -27,6 +28,23 @@ namespace DesafioTarefas.Infra.Repositories
                 .Include(t => t.Projeto)
                 .Where(t => t.Projeto.Id == projetoId)
                 .ToListAsync();
+        }
+
+        public async Task<RelatorioMediaTarefaConcluidaDto> ObterRelatorioMediaTarefasConcluidas(int quantidadeDias)
+        {
+            DateOnly dataInicial = DateOnly.FromDateTime(DateTime.Now.Date.AddDays(-quantidadeDias));
+
+            var itens = await _db.Tarefas
+                .Include(t => t.Projeto)
+                .Where(t => 
+                    t.DataConclusao != null
+                    && t.DataConclusao >= dataInicial
+                )
+                .GroupBy(t => t.Projeto.UsuarioId)
+                .Select(t => new RelatorioMediaTarefaConcluidaItemDto(t.Key, t.Count()))
+                .ToListAsync();
+
+            return new RelatorioMediaTarefaConcluidaDto(itens);
         }
 
         public Task IncluirTarefa(Tarefa tarefa)

@@ -1,4 +1,4 @@
 ﻿namespace DesafioTarefas.Domain.ValueObject
 {
-    public record Usuario(Guid Id, string Nome);
+    public record Usuario(Guid Id, string Nome, bool Admin);
 }

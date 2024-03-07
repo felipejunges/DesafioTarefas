@@ -1,4 +1,5 @@
-﻿using DesafioTarefas.Domain.Entities;
+﻿using DesafioTarefas.Domain.Dtos;
+using DesafioTarefas.Domain.Entities;
 
 namespace DesafioTarefas.Domain.Repositories
 {
@@ -9,5 +10,6 @@ namespace DesafioTarefas.Domain.Repositories
         Task IncluirTarefa(Tarefa tarefa);
         Task AlterarTarefa(Tarefa tarefa);
         Task ExcluirTarefa(Tarefa tarefa);
+        Task<RelatorioMediaTarefaConcluidaDto> ObterRelatorioMediaTarefasConcluidas(int quantidadeDias);
     }
 }
