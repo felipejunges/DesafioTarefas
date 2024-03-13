@@ -34,7 +34,12 @@ namespace DesafioTarefas.Application.Commands.Tarefas.IncluirTarefa
                 command.DataPrazo,
                 command.Observacoes);
 
-            tarefa.VincularProjeto(projeto);
+            var adicionarTarefaResult = projeto.AdicionarTarefa(tarefa);
+
+            if (!adicionarTarefaResult.IsSuccess)
+            {
+                return Result<TarefaResponse>.Error(adicionarTarefaResult.ErrorMessage ?? string.Empty);
+            }
 
             await _tarefaRepository.IncluirTarefa(tarefa);
 

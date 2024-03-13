@@ -66,11 +66,6 @@ namespace DesafioTarefas.Domain.Entities
                 DateOnly.FromDateTime(DateTime.Now).AddDays(1),
                 string.Empty);
 
-        public void VincularProjeto(Projeto projeto)
-        {
-            Projeto = projeto;
-        }
-
         public void Atualizar(Guid usuarioId, string titulo, Status status, DateOnly dataPrazo, string? observacoes)
         {
             ValidarCamposHistorico(usuarioId, titulo, status, dataPrazo);

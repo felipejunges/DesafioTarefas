@@ -5,7 +5,7 @@ using DesafioTarefas.Domain.Repositories;
 using DesafioTarefas.Domain.UnitsOfWork;
 using Moq;
 
-namespace DesafioTarefas.Tests.Application.Commands.ExcluirProjeto
+namespace DesafioTarefas.Tests.Application.Commands.Projetos.ExcluirProjeto
 {
     public class ExcluirProjetoCommandHandlerTests
     {
