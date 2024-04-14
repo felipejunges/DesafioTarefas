@@ -1,5 +1,4 @@
-﻿using DesafioTarefas.Application.Commands.Projetos.ListarProjetos;
-using DesafioTarefas.Application.Commands.Tarefas.AlterarTarefa;
+﻿using DesafioTarefas.Application.Commands.Tarefas.AlterarTarefa;
 using DesafioTarefas.Application.Commands.Tarefas.ExcluirTarefa;
 using DesafioTarefas.Application.Commands.Tarefas.IncluirComentario;
 using DesafioTarefas.Application.Commands.Tarefas.IncluirTarefa;
@@ -58,7 +57,7 @@ namespace DesafioTarefas.Api.Controllers
         }
 
         [HttpDelete("/api/Projetos/{projetoId}/[controller]/{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> ExcluirTarefa([FromRoute] Guid projetoId, [FromRoute] Guid id, [FromBody] ExcluirTarefaCommand command)
         {
@@ -67,7 +66,7 @@ namespace DesafioTarefas.Api.Controllers
             if (!result.IsSuccess)
                 return BadRequest(result.ErrorMessage);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpPost("/api/Projetos/{projetoId}/[controller]/{id}/Comentario")]

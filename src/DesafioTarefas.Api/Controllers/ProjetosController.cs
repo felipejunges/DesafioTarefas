@@ -41,7 +41,7 @@ namespace DesafioTarefas.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> ExcluirProjeto([FromRoute] Guid id)
         {
@@ -50,7 +50,7 @@ namespace DesafioTarefas.Api.Controllers
             if (!result.IsSuccess)
                 return BadRequest(result.ErrorMessage);
 
-            return Ok();
+            return NoContent();
         }
     }
 }
