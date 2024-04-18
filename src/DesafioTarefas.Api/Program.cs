@@ -1,9 +1,9 @@
 using DesafioTarefas.Api.Configuration;
+using DesafioTarefas.Api.Endpoints;
 using DesafioTarefas.Application;
 using DesafioTarefas.Infra.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,10 +15,6 @@ builder.Services.AddDbContext<DesafioContext>(db =>
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(ApplicationAssemblyReference.Assembly));
 
 builder.Services.AddDesafioServices();
-
-builder.Services
-    .AddControllers()
-    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -39,10 +35,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
-app.MapControllers();
-
 app.EnsureDbCreated();
+
+app.MapProjetosEndpoints();
+app.MapTarefasEndpoints();
+app.MapComentariosEndpoints();
+app.MapRelatoriosEndpoints();
 
 app.Run();

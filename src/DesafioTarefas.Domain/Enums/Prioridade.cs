@@ -1,5 +1,8 @@
-﻿namespace DesafioTarefas.Domain.Enums
+﻿using System.Text.Json.Serialization;
+
+namespace DesafioTarefas.Domain.Enums
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum Prioridade
     {
         Baixa = 0,
