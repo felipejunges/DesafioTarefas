@@ -15,6 +15,7 @@ builder.Services.AddDbContext<DesafioContext>(db =>
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(ApplicationAssemblyReference.Assembly));
 
 builder.Services.AddDesafioServices();
+builder.Services.AddDesafioValidators();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

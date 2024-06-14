@@ -1,10 +1,12 @@
 using DesafioTarefas.Api.Services;
+using DesafioTarefas.Application.Commands.Tarefas.IncluirComentario;
 using DesafioTarefas.Domain.Repositories;
 using DesafioTarefas.Domain.Services;
 using DesafioTarefas.Domain.UnitsOfWork;
 using DesafioTarefas.Infra.Contexts;
 using DesafioTarefas.Infra.Repositories;
 using DesafioTarefas.Infra.UnitsOfWork;
+using FluentValidation;
 using System.Data;
 
 namespace DesafioTarefas.Api.Configuration
@@ -13,10 +15,19 @@ namespace DesafioTarefas.Api.Configuration
     {
         public static IServiceCollection AddDesafioServices(this IServiceCollection services)
         {
-            services.AddScoped<IUserResolverService, UserResolverService>();
-            services.AddScoped<IProjetoRepository, ProjetoRepository>();
-            services.AddScoped<ITarefaRepository, TarefasRepository>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services
+                .AddScoped<IUserResolverService, UserResolverService>()
+                .AddScoped<IProjetoRepository, ProjetoRepository>()
+                .AddScoped<ITarefaRepository, TarefasRepository>()
+                .AddScoped<IUnitOfWork, UnitOfWork>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddDesafioValidators(this IServiceCollection services)
+        {
+            services
+                .AddScoped<IValidator<IncluirComentarioCommand>, IncluirComentarioCommandValidator>();
 
             return services;
         }
@@ -31,7 +42,7 @@ namespace DesafioTarefas.Api.Configuration
             {
                 tentativa++;
 
-                logger?.LogInformation($"Aguardando {{tempo}} segundos para criar {nameof(DesafioContext)}", tentativa);
+                logger?.LogInformation("Aguardando {tempo} segundos para criar {contexto}", tentativa, nameof(DesafioContext));
                 Thread.Sleep(tentativa * 1000);
 
                 try
@@ -40,17 +51,17 @@ namespace DesafioTarefas.Api.Configuration
                     var db = scope.ServiceProvider.GetRequiredService<DesafioContext>();
                     db.Database.EnsureCreated();
 
-                    logger?.LogInformation($"Criada database {nameof(DesafioContext)}");
+                    logger?.LogInformation("Criada database {contexto}", nameof(DesafioContext));
 
                     return app;
                 }
                 catch (Exception ex)
                 {
-                    logger?.LogError(ex, $"Não foi possível conectar ao {nameof(DesafioContext)}. Tentativa {tentativa}.", tentativa);
+                    logger?.LogError(ex, "Não foi possível conectar ao {contexto}. Tentativa {tentativa}.", nameof(DesafioContext), tentativa);
                 }
             }
 
-            throw new DataException($"Não foi possível conectar no {nameof(DesafioContext)} depois de 10 tentativas");
+            throw new DataException("Não foi possível conectar no {nameof(DesafioContext)} depois de 10 tentativas");
         }
     }
 }
