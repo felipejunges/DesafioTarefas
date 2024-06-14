@@ -1,4 +1,5 @@
 ﻿using DesafioTarefas.Application.Commands.Tarefas.IncluirComentario;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -17,8 +18,19 @@ namespace DesafioTarefas.Api.Endpoints
             endpoints.MapPost("/", IncluirComentario);
         }
 
-        private static async Task<Results<Created, BadRequest<string>>> IncluirComentario(Guid projetoId, Guid tarefaId, IncluirComentarioCommand command, IMediator mediator)
+        private static async Task<Results<Created, BadRequest<string>, ValidationProblem>> IncluirComentario(
+            Guid projetoId,
+            Guid tarefaId,
+            IncluirComentarioCommand command,
+            IValidator<IncluirComentarioCommand> validator,
+            IMediator mediator)
         {
+            var validation = validator.Validate(command);
+            if (!validation.IsValid)
+            {
+                return TypedResults.ValidationProblem(validation.ToDictionary());
+            }
+
             var result = await mediator.Send(command.Agregar(projetoId, tarefaId));
 
             return result.IsSuccess
