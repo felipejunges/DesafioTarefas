@@ -3,6 +3,7 @@ using DesafioTarefas.Application.Commands.Tarefas.ExcluirTarefa;
 using DesafioTarefas.Application.Commands.Tarefas.IncluirTarefa;
 using DesafioTarefas.Application.Commands.Tarefas.ListarTarefas;
 using DesafioTarefas.Application.Models.Tarefas;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -29,8 +30,18 @@ namespace DesafioTarefas.Api.Endpoints
             return await mediator.Send(new ListarTarefasQuery(projetoId));
         }
 
-        private static async Task<Results<Created<TarefaResponse>, BadRequest<string>>> IncluirTarefa(Guid projetoId, IncluirTarefaCommand command, IMediator mediator)
+        private static async Task<Results<Created<TarefaResponse>, BadRequest<string>, ValidationProblem>> IncluirTarefa(
+            Guid projetoId,
+            IncluirTarefaCommand command,
+            IValidator<IncluirTarefaCommand> validator,
+            IMediator mediator)
         {
+            var validation = validator.Validate(command);
+            if (!validation.IsValid)
+            {
+                return TypedResults.ValidationProblem(validation.ToDictionary());
+            }
+
             var result = await mediator.Send(command.Agregar(projetoId));
 
             return result.IsSuccess
@@ -39,14 +50,24 @@ namespace DesafioTarefas.Api.Endpoints
 
         }
 
-        private static async Task<Results<Ok, BadRequest<string>>> AlterarTarefa(Guid projetoId, Guid id, AlterarTarefaCommand command, IMediator mediator)
+        private static async Task<Results<Ok, BadRequest<string>, ValidationProblem>> AlterarTarefa(
+            Guid projetoId,
+            Guid id,
+            AlterarTarefaCommand command,
+            IValidator<AlterarTarefaCommand> validator,
+            IMediator mediator)
         {
+            var validation = validator.Validate(command);
+            if (!validation.IsValid)
+            {
+                return TypedResults.ValidationProblem(validation.ToDictionary());
+            }
+
             var result = await mediator.Send(command.Agregar(projetoId, id));
 
             return result.IsSuccess
                 ? TypedResults.Ok()
                 : TypedResults.BadRequest(result.ErrorMessage);
-
         }
 
         private static async Task<Results<NoContent, BadRequest<string>>> ExcluirTarefa(Guid projetoId, Guid id, IMediator mediator)
@@ -57,18 +78,5 @@ namespace DesafioTarefas.Api.Endpoints
                 ? TypedResults.NoContent()
                 : TypedResults.BadRequest(result.ErrorMessage);
         }
-
-        //[HttpPost("/api/Projetos/{projetoId}/[controller]/{id}/Comentario")]
-        //[ProducesResponseType(typeof(TarefaResponse), StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //public async Task<ActionResult<TarefaResponse>> IncluirComentario([FromRoute] Guid projetoId, Guid id, [FromBody] IncluirComentarioCommand command)
-        //{
-        //    var result = await _mediator.Send(command.Agregar(projetoId, id));
-
-        //    if (!result.IsSuccess)
-        //        return BadRequest(result.ErrorMessage);
-
-        //    return Ok();
-        //}
     }
 }

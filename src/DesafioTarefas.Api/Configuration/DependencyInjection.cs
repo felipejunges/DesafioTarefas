@@ -1,5 +1,7 @@
 using DesafioTarefas.Api.Services;
+using DesafioTarefas.Application.Commands.Tarefas.AlterarTarefa;
 using DesafioTarefas.Application.Commands.Tarefas.IncluirComentario;
+using DesafioTarefas.Application.Commands.Tarefas.IncluirTarefa;
 using DesafioTarefas.Domain.Repositories;
 using DesafioTarefas.Domain.Services;
 using DesafioTarefas.Domain.UnitsOfWork;
@@ -27,7 +29,9 @@ namespace DesafioTarefas.Api.Configuration
         public static IServiceCollection AddDesafioValidators(this IServiceCollection services)
         {
             services
-                .AddScoped<IValidator<IncluirComentarioCommand>, IncluirComentarioCommandValidator>();
+                .AddScoped<IValidator<AlterarTarefaCommand>, AlterarTarefaCommandValidator>()
+                .AddScoped<IValidator<IncluirComentarioCommand>, IncluirComentarioCommandValidator>()
+                .AddScoped<IValidator<IncluirTarefaCommand>, IncluirTarefaCommandValidator>();
 
             return services;
         }
